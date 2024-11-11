@@ -13,7 +13,7 @@ function troubleshootNextJs() {
   }
 
   let packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
-  let nextVersion = packageJson.dependencies?.next || packageJson.devDependencies?.next;
+  let nextVersion = packageJson.dependencies && packageJson.dependencies.next || packageJson.devDependencies && packageJson.devDependencies.next;
 
   if (nextVersion) {
     console.log(`Next.js version found in package.json: ${nextVersion}`);
@@ -26,7 +26,7 @@ function troubleshootNextJs() {
       
       // Update package.json content after installation
       packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
-      nextVersion = packageJson.dependencies?.next || packageJson.devDependencies?.next;
+      nextVersion = packageJson.dependencies && packageJson.dependencies.next || packageJson.devDependencies && packageJson.devDependencies.next;
     } catch (error) {
       console.error('Error installing Next.js:', error.message);
       return;
@@ -125,7 +125,7 @@ export default function Home() {
     console.log('tsconfig.json found.');
   }
 
-  console.log('\nTroubleshooting complete. Please try deploying your project again.');
+  console.log('\nTroubleshooting complete. Please try building your project again with "npx next build".');
   console.log('If the issue persists, make sure to commit and push these changes to your repository.');
 }
 
