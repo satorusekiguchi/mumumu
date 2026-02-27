@@ -6,7 +6,6 @@
 
 //【必須】 自分のメールアドレスの設定 -- 複数のメールアドレスに送信したい場合は、以下の行をコピーして増やしていけばOKです。行頭の//を消せば有効となります。いくつでも追加可能。 --
 $rm_send_address[] = 'hello@mumumu.co.jp';
-$rm_send_address[] = 's.sekiguchi@mumumu.co.jp';
 //$rm_send_address[] = 'ccc@example.co.jp';
 
 
@@ -132,3 +131,29 @@ $rm_rate_limit_window = 600;
 
 //【任意】 bot検知用: フォーム表示から送信までの最低秒数 -- これより速い送信はbot判定 --
 $rm_min_submit_time = 3;
+
+
+
+
+/* -- 以下、SMTP送信の設定（Google Workspace経由） ------------------------------------------------------------------------------------------------------------------ */
+
+
+//【必須】 SMTPホスト -- Google Workspaceの場合は smtp.gmail.com --
+$rm_smtp_host = 'smtp.gmail.com';
+
+//【必須】 SMTPポート -- TLSの場合は587 --
+$rm_smtp_port = 587;
+
+//【必須】 SMTP認証ユーザー -- Google Workspaceのメールアドレス --
+$rm_smtp_user = 'hello@mumumu.co.jp';
+
+//【必須】 SMTPパスワード -- Google Workspaceの「アプリパスワード」を設定してください --
+// ※ 通常のログインパスワードではありません。以下の手順で取得:
+// 1. https://myaccount.google.com/security にアクセス（hello@mumumu.co.jp でログイン）
+// 2.「2段階認証プロセス」が有効であることを確認
+// 3.「アプリパスワード」→ アプリ名「mumumu mailform」で生成
+// 4. 表示された16文字のパスワードをここに設定
+$rm_smtp_pass = '';
+
+//【必須】 SMTP暗号化方式 -- tls または ssl --
+$rm_smtp_secure = 'tls';

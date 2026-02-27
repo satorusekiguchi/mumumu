@@ -1,5 +1,12 @@
 <?php
 
+require_once dirname(__FILE__) . '/lib/PHPMailer/Exception.php';
+require_once dirname(__FILE__) . '/lib/PHPMailer/PHPMailer.php';
+require_once dirname(__FILE__) . '/lib/PHPMailer/SMTP.php';
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception as PHPMailerException;
+
 class ContactMailer
 {
     private array $sendAddresses = [];
@@ -19,26 +26,36 @@ class ContactMailer
     private int $rateLimitWindow = 600;
     private int $minSubmitTime = 3;
 
-    private string $csrfToken = '';
+    private string $smtpHost = '';
+    private int $smtpPort = 587;
+    private string $smtpUser = '';
+    private string $smtpPass = '';
+    private string $smtpSecure = 'tls';
 
     public function __construct()
     {
         include dirname(__FILE__) . '/config.php';
 
-        $this->sendAddresses     = $rm_send_address;
-        $this->fromAddress       = $rm_from_address;
-        $this->senderName        = $rm_send_name;
-        $this->sendSubject       = $rm_send_subject;
-        $this->sendBodyPrefix    = $rm_send_body;
-        $this->thanksSubject     = $rm_thanks_subject;
-        $this->thanksBodyPrefix  = $rm_thanks_body;
+        $this->sendAddresses       = $rm_send_address;
+        $this->fromAddress         = $rm_from_address;
+        $this->senderName          = $rm_send_name;
+        $this->sendSubject         = $rm_send_subject;
+        $this->sendBodyPrefix      = $rm_send_body;
+        $this->thanksSubject       = $rm_thanks_subject;
+        $this->thanksBodyPrefix    = $rm_thanks_body;
         $this->thanksBodySignature = $rm_thanks_body_signature;
-        $this->thanksPageUrl     = $rm_thanks_page_url;
-        $this->replyMailEnabled  = !empty($rm_reply_mail);
-        $this->htmlReplyEnabled  = !empty($rm_html_reply);
-        $this->rateLimitCount    = $rm_rate_limit_count ?? 3;
-        $this->rateLimitWindow   = $rm_rate_limit_window ?? 600;
-        $this->minSubmitTime     = $rm_min_submit_time ?? 3;
+        $this->thanksPageUrl       = $rm_thanks_page_url;
+        $this->replyMailEnabled    = !empty($rm_reply_mail);
+        $this->htmlReplyEnabled    = !empty($rm_html_reply);
+        $this->rateLimitCount      = $rm_rate_limit_count ?? 3;
+        $this->rateLimitWindow     = $rm_rate_limit_window ?? 600;
+        $this->minSubmitTime       = $rm_min_submit_time ?? 3;
+
+        $this->smtpHost   = $rm_smtp_host ?? '';
+        $this->smtpPort   = $rm_smtp_port ?? 587;
+        $this->smtpUser   = $rm_smtp_user ?? '';
+        $this->smtpPass   = $rm_smtp_pass ?? '';
+        $this->smtpSecure = $rm_smtp_secure ?? 'tls';
     }
 
     // ------------------------------------------------------------------
@@ -159,18 +176,17 @@ class ContactMailer
 
     private function buildFormData(array $data): array
     {
-        $fields = [
-            '会社名'       => $this->sanitize($data['company'] ?? ''),
-            'お名前'       => $this->sanitize($data['name_1'] ?? ''),
-            '電話番号'      => $this->sanitize($data['phone'] ?? ''),
-            'メールアドレス'  => $this->stripHeaderInjection($this->sanitize($data['mail_address'] ?? '')),
-            'お問い合わせ内容' => $this->sanitize($data['inquiry'] ?? ''),
-            'お問い合わせ詳細' => $this->sanitize($data['contents'] ?? '', 10000),
+        return [
+            '会社名'         => $this->sanitize($data['company'] ?? ''),
+            'お名前'         => $this->sanitize($data['name_1'] ?? ''),
+            '電話番号'        => $this->sanitize($data['phone'] ?? ''),
+            'メールアドレス'    => $this->stripHeaderInjection($this->sanitize($data['mail_address'] ?? '')),
+            'お問い合わせ内容'  => $this->sanitize($data['inquiry'] ?? ''),
+            'お問い合わせ詳細'  => $this->sanitize($data['contents'] ?? '', 10000),
         ];
-        return $fields;
     }
 
-    private function buildAdminBody(array $fields): string
+    private function buildAdminTextBody(array $fields): string
     {
         $sendDate = date('Y年m月d日 H時i分s秒');
         $body = $this->sendBodyPrefix;
@@ -188,6 +204,23 @@ class ContactMailer
         $body .= "\n【送信者のブラウザ】\n" . ($_SERVER['HTTP_USER_AGENT'] ?? '不明') . "\n";
 
         return $body;
+    }
+
+    private function buildAdminHtmlBody(array $fields): string
+    {
+        $templatePath = dirname(__FILE__) . '/html-mail-template-admin.php';
+        if (!file_exists($templatePath)) {
+            return '';
+        }
+
+        $sendDate   = date('Y年m月d日 H時i分s秒');
+        $senderName = $this->senderName;
+        $remoteAddr = $_SERVER['REMOTE_ADDR'] ?? '不明';
+        $userAgent  = $_SERVER['HTTP_USER_AGENT'] ?? '不明';
+
+        ob_start();
+        include $templatePath;
+        return ob_get_clean();
     }
 
     private function buildReplyTextBody(array $fields): string
@@ -216,8 +249,8 @@ class ContactMailer
             return '';
         }
 
-        $sendDate  = date('Y年m月d日 H時i分s秒');
-        $signature = $this->thanksBodySignature;
+        $sendDate   = date('Y年m月d日 H時i分s秒');
+        $signature  = $this->thanksBodySignature;
         $senderName = $this->senderName;
 
         ob_start();
@@ -226,84 +259,114 @@ class ContactMailer
     }
 
     // ------------------------------------------------------------------
+    // PHPMailer instance factory
+    // ------------------------------------------------------------------
+
+    private function createMailer(): PHPMailer
+    {
+        $mail = new PHPMailer(true);
+        $mail->CharSet  = 'UTF-8';
+        $mail->Encoding = 'base64';
+
+        if ($this->smtpHost !== '' && $this->smtpPass !== '') {
+            $mail->isSMTP();
+            $mail->Host       = $this->smtpHost;
+            $mail->SMTPAuth   = true;
+            $mail->Username   = $this->smtpUser;
+            $mail->Password   = $this->smtpPass;
+            $mail->SMTPSecure = $this->smtpSecure === 'ssl'
+                ? PHPMailer::ENCRYPTION_SMTPS
+                : PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Port       = $this->smtpPort;
+        }
+
+        $mail->setFrom($this->fromAddress, $this->senderName);
+
+        return $mail;
+    }
+
+    // ------------------------------------------------------------------
     // Send
     // ------------------------------------------------------------------
 
     public function send(array $postData): array
     {
-        $fields = $this->buildFormData($postData);
+        $fields      = $this->buildFormData($postData);
         $mailAddress = $this->stripHeaderInjection($this->sanitize($postData['mail_address'] ?? ''));
 
-        $fromHeader = "From: " . $this->fromAddress;
-        $fromParam  = '-f' . $this->fromAddress;
-
-        $adminBody = $this->buildAdminBody($fields);
-        $allSuccess = true;
-        foreach ($this->sendAddresses as $addr) {
-            $result = mb_send_mail($addr, $this->sendSubject, $adminBody, $fromHeader, $fromParam);
-            if (!$result) {
-                $allSuccess = false;
-            }
-        }
-
+        $adminResult = $this->sendAdminMail($fields, $mailAddress);
         $replyResult = true;
-        if ($this->replyMailEnabled && filter_var($mailAddress, FILTER_VALIDATE_EMAIL)) {
-            $encodedName = mb_encode_mimeheader($this->senderName, 'UTF-8');
-            $replyFrom = "From: {$encodedName} <{$this->fromAddress}>";
-            $replyParam = '-f' . $this->fromAddress;
 
-            if ($this->htmlReplyEnabled) {
-                $replyResult = $this->sendMultipartMail(
-                    $mailAddress,
-                    $this->thanksSubject,
-                    $this->buildReplyTextBody($fields),
-                    $this->buildReplyHtmlBody($fields),
-                    $replyFrom,
-                    $replyParam
-                );
-            } else {
-                $textBody = $this->buildReplyTextBody($fields);
-                $replyResult = mb_send_mail($mailAddress, $this->thanksSubject, $textBody, $replyFrom, $replyParam);
-            }
+        if ($this->replyMailEnabled && filter_var($mailAddress, FILTER_VALIDATE_EMAIL)) {
+            $replyResult = $this->sendReplyMail($fields, $mailAddress);
         }
 
         $this->recordSend();
 
         return [
-            'admin_sent' => $allSuccess,
+            'admin_sent' => $adminResult,
             'reply_sent' => $replyResult,
             'thanks_url' => $this->thanksPageUrl,
         ];
     }
 
-    private function sendMultipartMail(
-        string $to,
-        string $subject,
-        string $textBody,
-        string $htmlBody,
-        string $fromHeader,
-        string $fromParam
-    ): bool {
-        $boundary = '----=_Part_' . md5(uniqid(mt_rand(), true));
+    private function sendAdminMail(array $fields, string $replyTo): bool
+    {
+        try {
+            $mail = $this->createMailer();
 
-        $headers  = $fromHeader . "\r\n";
-        $headers .= "MIME-Version: 1.0\r\n";
-        $headers .= "Content-Type: multipart/alternative; boundary=\"{$boundary}\"\r\n";
+            if (filter_var($replyTo, FILTER_VALIDATE_EMAIL)) {
+                $mail->addReplyTo($replyTo);
+            }
 
-        $body  = "--{$boundary}\r\n";
-        $body .= "Content-Type: text/plain; charset=UTF-8\r\n";
-        $body .= "Content-Transfer-Encoding: base64\r\n\r\n";
-        $body .= chunk_split(base64_encode($textBody)) . "\r\n";
+            foreach ($this->sendAddresses as $addr) {
+                $mail->addAddress($addr);
+            }
 
-        $body .= "--{$boundary}\r\n";
-        $body .= "Content-Type: text/html; charset=UTF-8\r\n";
-        $body .= "Content-Transfer-Encoding: base64\r\n\r\n";
-        $body .= chunk_split(base64_encode($htmlBody)) . "\r\n";
+            $mail->Subject = $this->sendSubject;
+            $mail->isHTML(true);
 
-        $body .= "--{$boundary}--\r\n";
+            $htmlBody = $this->buildAdminHtmlBody($fields);
+            $textBody = $this->buildAdminTextBody($fields);
 
-        $encodedSubject = mb_encode_mimeheader($subject, 'UTF-8');
+            if ($htmlBody !== '') {
+                $mail->Body    = $htmlBody;
+                $mail->AltBody = $textBody;
+            } else {
+                $mail->isHTML(false);
+                $mail->Body = $textBody;
+            }
 
-        return mail($to, $encodedSubject, $body, $headers, $fromParam);
+            return $mail->send();
+        } catch (PHPMailerException $e) {
+            error_log('Admin mail error: ' . $e->getMessage());
+            return false;
+        }
+    }
+
+    private function sendReplyMail(array $fields, string $to): bool
+    {
+        try {
+            $mail = $this->createMailer();
+            $mail->addAddress($to);
+            $mail->Subject = $this->thanksSubject;
+
+            $textBody = $this->buildReplyTextBody($fields);
+            $htmlBody = $this->htmlReplyEnabled ? $this->buildReplyHtmlBody($fields) : '';
+
+            if ($htmlBody !== '') {
+                $mail->isHTML(true);
+                $mail->Body    = $htmlBody;
+                $mail->AltBody = $textBody;
+            } else {
+                $mail->isHTML(false);
+                $mail->Body = $textBody;
+            }
+
+            return $mail->send();
+        } catch (PHPMailerException $e) {
+            error_log('Reply mail error: ' . $e->getMessage());
+            return false;
+        }
     }
 }
