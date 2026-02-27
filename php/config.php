@@ -153,7 +153,7 @@ $rm_smtp_user = 'hello@mumumu.co.jp';
 // 2.「2段階認証プロセス」が有効であることを確認
 // 3.「アプリパスワード」→ アプリ名「mumumu mailform」で生成
 // 4. 表示された16文字のパスワードをここに設定
-$rm_smtp_pass = '';
+$rm_smtp_pass = 'lvkinyqbtmirzajk';
 
 //【必須】 SMTP暗号化方式 -- tls または ssl --
 $rm_smtp_secure = 'tls';
