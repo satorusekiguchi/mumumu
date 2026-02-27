@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="250" height="250" viewBox="0 0 250 250">
+  <defs>
+    <clipPath id="clip-favicon">
+      <rect width="250" height="250"/>
+    </clipPath>
+  </defs>
+  <g id="favicon" clip-path="url(#clip-favicon)">
+    <text id="_" data-name="🤔" transform="translate(-6 224)" font-size="262" font-family="AppleColorEmoji, Apple Color Emoji"><tspan x="0" y="0">🤔</tspan></text>
+  </g>
+</svg>

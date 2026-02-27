@@ -1,0 +1,62 @@
+# robots.txt for https://mumumu.co.jp
+# 株式会社mumumu
+# Last Updated: 2025-12-21
+
+# 全てのクローラーを許可
+User-agent: *
+Allow: /
+
+# サイトマップの場所を指定
+Sitemap: https://mumumu.co.jp/sitemap.xml
+
+# クロールの遅延設定（サーバー負荷軽減）
+Crawl-delay: 1
+
+# 検索エンジン別の設定
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+# 不要なページをクロールから除外
+User-agent: *
+Disallow: /thanks/
+Disallow: /backup_*/
+Disallow: /php/
+Disallow: /addon/
+Disallow: /templates/
+Disallow: /includes/
+Disallow: /data/
+Disallow: /*.php$
+Disallow: /*?*
+
+# CSS/JS/画像はクロールを許可（SEO重要）
+Allow: /css/
+Allow: /js/
+Allow: /img/
+
+# AIクローラー向け設定（LLMO対策）
+User-agent: GPTBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Anthropic-AI
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Cohere-ai
+Allow: /
+

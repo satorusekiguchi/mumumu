@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+                            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd
+                            http://www.google.com/schemas/sitemap-image/1.1
+                            http://www.google.com/schemas/sitemap-image/1.1/sitemap-image.xsd">
+
+  <!-- ============================================
+       株式会社mumumu サイトマップ
+       https://mumumu.co.jp
+       Last Updated: 2025-12-26
+       ============================================ -->
+
+  <!-- ホームページ -->
+  <url>
+    <loc>https://mumumu.co.jp/</loc>
+    <lastmod>2025-12-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://mumumu.co.jp/img/ogp.png</image:loc>
+      <image:title>株式会社mumumu - 個人の好きで経済を動かす</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://mumumu.co.jp/img/mumumu-logo.png</image:loc>
+      <image:title>mumumu ロゴ</image:title>
+    </image:image>
+  </url>
+
+  <!-- ============================================
+       会社情報
+       ============================================ -->
+  
+  <!-- 会社概要 -->
+  <url>
+    <loc>https://mumumu.co.jp/company/</loc>
+    <lastmod>2025-12-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ミッション・理念 -->
+  <url>
+    <loc>https://mumumu.co.jp/mission/</loc>
+    <lastmod>2025-12-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ============================================
+       サービス一覧
+       ============================================ -->
+  
+  <!-- サービストップ -->
+  <url>
+    <loc>https://mumumu.co.jp/services/</loc>
+    <lastmod>2025-12-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- デジタルマーケティング -->
+  <url>
+    <loc>https://mumumu.co.jp/services/digital-marketing/</loc>
+    <lastmod>2025-12-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://mumumu.co.jp/img/dm.jpg</image:loc>
+      <image:title>デジタルマーケティング支援 - Web制作・広告運用・SEO対策</image:title>
+    </image:image>
+  </url>
+
+  <!-- ファンダムマーケティング -->
+  <url>
+    <loc>https://mumumu.co.jp/services/fandom-marketing/</loc>
+    <lastmod>2025-12-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- 美容ブランド事業 núːd -->
+  <url>
+    <loc>https://mumumu.co.jp/services/beauty/</loc>
+    <lastmod>2025-12-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://mumumu.co.jp/img/nude/product-hero.jpg</image:loc>
+      <image:title>núːd - D2C美容ブランド事業</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://mumumu.co.jp/img/nude-logo.svg</image:loc>
+      <image:title>núːd ロゴ</image:title>
+    </image:image>
+  </url>
+
+  <!-- ============================================
+       制作実績（Works）
+       ============================================ -->
+  
+  <!-- 実績一覧トップ -->
+  <url>
+    <loc>https://mumumu.co.jp/works/</loc>
+    <lastmod>2025-12-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Open Gantt - AIガントチャートツール -->
+  <url>
+    <loc>https://mumumu.co.jp/works/open-gantt/</loc>
+    <lastmod>2025-12-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://mumumu.co.jp/img/works/open-gantt.png</image:loc>
+      <image:title>Open Gantt - AI自動生成ガントチャートツール</image:title>
+    </image:image>
+  </url>
+
+  <!-- nuːd SkinScan AI - 肌診断AIシステム -->
+  <url>
+    <loc>https://mumumu.co.jp/works/nude-skinscan/</loc>
+    <lastmod>2025-12-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://mumumu.co.jp/img/works/nude-skinscan.png</image:loc>
+      <image:title>nuːd SkinScan AI - 肌診断AIシステム</image:title>
+    </image:image>
+  </url>
+
+  <!-- BESTPLAY - オリジナル商品支援 -->
+  <url>
+    <loc>https://mumumu.co.jp/works/bestplay/</loc>
+    <lastmod>2025-09-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://mumumu.co.jp/img/works/bpn.png</image:loc>
+      <image:title>BESTPLAY - オリジナル商品支援</image:title>
+    </image:image>
+  </url>
+
+  <!-- totono - 住まいサポートアプリ -->
+  <url>
+    <loc>https://mumumu.co.jp/works/totono/</loc>
+    <lastmod>2024-08-01</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://mumumu.co.jp/img/works/totono.png</image:loc>
+      <image:title>totono - 住まいサポートアプリ（グッドデザイン賞受賞）</image:title>
+    </image:image>
+  </url>
+
+  <!-- nokaze - 陶器・和食器ECサイト -->
+  <url>
+    <loc>https://mumumu.co.jp/works/nokaze/</loc>
+    <lastmod>2023-12-01</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://mumumu.co.jp/img/works/nokaze.png</image:loc>
+      <image:title>nokaze - 陶器・和食器ECサイト</image:title>
+    </image:image>
+  </url>
+
+  <!-- レガテックキャリア - 建設業界向け転職LP -->
+  <url>
+    <loc>https://mumumu.co.jp/works/legatech-career/</loc>
+    <lastmod>2023-03-01</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://mumumu.co.jp/img/works/legatech-career.png</image:loc>
+      <image:title>レガテックキャリア - 建設業界向け転職LP</image:title>
+    </image:image>
+  </url>
+
+  <!-- 補助金適正診断LP -->
+  <url>
+    <loc>https://mumumu.co.jp/works/hojokin/</loc>
+    <lastmod>2023-02-01</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://mumumu.co.jp/img/works/hojokin.png</image:loc>
+      <image:title>補助金適正診断LP</image:title>
+    </image:image>
+  </url>
+
+  <!-- EC戦略設計LP -->
+  <url>
+    <loc>https://mumumu.co.jp/works/ec-service/</loc>
+    <lastmod>2023-01-01</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://mumumu.co.jp/img/works/ec-service.png</image:loc>
+      <image:title>EC戦略設計LP</image:title>
+    </image:image>
+  </url>
+
+  <!-- ============================================
+       コンテンツページ
+       ============================================ -->
+  
+  <!-- 広告実績 -->
+  <url>
+    <loc>https://mumumu.co.jp/ad-cases/</loc>
+    <lastmod>2025-12-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- ニュース一覧 -->
+  <url>
+    <loc>https://mumumu.co.jp/news/</loc>
+    <lastmod>2024-12-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- ============================================
+       お問い合わせ・法的ページ
+       ============================================ -->
+  
+  <!-- お問い合わせ -->
+  <url>
+    <loc>https://mumumu.co.jp/contact/</loc>
+    <lastmod>2025-12-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- プライバシーポリシー -->
+  <url>
+    <loc>https://mumumu.co.jp/privacy-policy/</loc>
+    <lastmod>2024-05-01</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+</urlset>
+
